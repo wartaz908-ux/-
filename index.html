@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>পাঠখাতা — SSC প্রস্তুতি</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla:ital@0;1&family=Hind+Siliguri:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F1E4;
+    --paper-line:#D8CFB4;
+    --ink:#1E2A44;
+    --ink-soft:#3A4A6B;
+    --red:#AA3327;
+    --red-soft:#C24A3D;
+    --gold:#B8862E;
+    --gold-soft:#E4C77A;
+    --text:#2A2A28;
+    --card:#FFFCF3;
+    --shadow: 0 1px 0 rgba(0,0,0,0.05);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      repeating-linear-gradient(
+        var(--paper),
+        var(--paper) 37px,
+        var(--paper-line) 38px
+      );
+    background-color:var(--paper);
+    color:var(--text);
+    font-family:'Hind Siliguri', sans-serif;
+    position:relative;
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    top:0; left:64px;
+    width:2px; height:100%;
+    background:rgba(170,51,39,0.28);
+    z-index:0;
+    pointer-events:none;
+  }
+  @media (max-width: 640px){
+    body::before{ left:34px; }
+  }
+
+  h1,h2,h3, .brand, .tab-label{
+    font-family:'Tiro Bangla', serif;
+  }
+
+  /* ===== Header ===== */
+  header{
+    position:relative;
+    z-index:2;
+    padding:38px 24px 18px 88px;
+  }
+  @media (max-width:640px){ header{ padding:28px 16px 14px 52px; } }
+
+  .brand-row{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .brand{
+    font-size:2.4rem;
+    color:var(--ink);
+    font-weight:700;
+    letter-spacing:0.5px;
+  }
+  .brand span{ color:var(--red); }
+  .tagline{
+    color:var(--ink-soft);
+    font-size:0.98rem;
+    margin-top:4px;
+  }
+  .stamp{
+    margin-left:auto;
+    border:2px solid var(--red-soft);
+    color:var(--red-soft);
+    padding:6px 14px;
+    border-radius:4px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:1.5px;
+    transform:rotate(-4deg);
+    white-space:nowrap;
+  }
+
+  /* ===== Subject tabs (notebook dividers) ===== */
+  .subject-tabs{
+    position:relative;
+    z-index:2;
+    display:flex;
+    gap:6px;
+    padding:0 24px 0 88px;
+    margin-top:22px;
+    overflow-x:auto;
+  }
+  @media (max-width:640px){ .subject-tabs{ padding:0 16px 0 52px; gap:4px;} }
+
+  .tab-btn{
+    font-family:'Tiro Bangla', serif;
+    font-size:1.05rem;
+    background:var(--paper-line);
+    color:var(--ink-soft);
+    border:none;
+    padding:12px 22px 10px;
+    border-radius:10px 10px 0 0;
+    cursor:pointer;
+    position:relative;
+    top:4px;
+    transition:all .18s ease;
+    white-space:nowrap;
+    opacity:0.7;
+  }
+  .tab-btn:hover{ opacity:1; }
+  .tab-btn.active{
+    background:var(--card);
+    color:var(--ink);
+    top:0;
+    opacity:1;
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.06);
+    font-weight:700;
+  }
+  .tab-btn.active::after{
+    content:"";
+    position:absolute;
+    bottom:-2px; left:0; right:0;
+    height:4px;
+    background:var(--gold);
+  }
+
+  /* ===== Main panel ===== */
+  main{
+    position:relative;
+    z-index:2;
+    margin:0 24px 60px 88px;
+    background:var(--card);
+    border-radius:0 12px 12px 12px;
+    box-shadow:0 8px 30px rgba(30,42,68,0.08);
+    min-height:60vh;
+    padding:36px 40px;
+  }
+  @media (max-width:640px){
+    main{ margin:0 16px 40px 52px; padding:22px 18px; }
+  }
+
+  .subject-panel{ display:none; animation:fadeIn .25s ease; }
+  .subject-panel.active{ display:block; }
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  .subject-head{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:8px;
+  }
+  .subject-head h2{
+    font-size:1.9rem;
+    color:var(--ink);
+    margin:0;
+  }
+  .subject-head .en{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    color:var(--gold);
+    letter-spacing:2px;
+    text-transform:uppercase;
+    border:1px solid var(--gold-soft);
+    padding:3px 8px;
+    border-radius:4px;
+  }
+  .subject-sub{ color:var(--ink-soft); margin:0 0 24px; }
+
+  /* ===== inner mode tabs (notes/formula/mcq) ===== */
+  .mode-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:26px;
+    border-bottom:1px solid var(--paper-line);
+    padding-bottom:0;
+  }
+  .mode-btn{
+    background:none;
+    border:none;
+    font-family:'Hind Siliguri', sans-serif;
+    font-weight:600;
+    font-size:0.98rem;
+    color:var(--ink-soft);
+    padding:9px 4px 12px;
+    cursor:pointer;
+    position:relative;
+    opacity:0.65;
+  }
+  .mode-btn.active{
+    color:var(--ink);
+    opacity:1;
+  }
+  .mode-btn.active::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:-1px;
+    height:3px;
+    background:var(--red-soft);
+    border-radius:2px;
+  }
+  .mode-panel{ display:none; }
+  .mode-panel.active{ display:block; animation:fadeIn .2s ease; }
+
+  /* ===== Notes cards ===== */
+  .note-card{
+    border-left:3px solid var(--gold);
+    background:linear-gradient(90deg, rgba(184,134,46,0.06), transparent 60%);
+    padding:14px 18px;
+    margin-bottom:16px;
+    border-radius:0 8px 8px 0;
+  }
+  .note-card h3{
+    margin:0 0 6px;
+    font-size:1.12rem;
+    color:var(--ink);
+  }
+  .note-card p{
+    margin:0;
+    line-height:1.75;
+    color:var(--text);
+    font-size:0.98rem;
+  }
+
+  /* ===== Formula table ===== */
+  .formula-grid{
+    display:grid;
+    gap:12px;
+  }
+  .formula-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    background:#FBF7EA;
+    border:1px solid var(--paper-line);
+    border-radius:8px;
+    padding:12px 18px;
+    flex-wrap:wrap;
+  }
+  .formula-name{ color:var(--ink-soft); font-size:0.92rem; }
+  .formula-expr{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:600;
+    color:var(--red-soft);
+    font-size:1.05rem;
+  }
+
+  /* ===== MCQ ===== */
+  .quiz-wrap{ max-width:640px; }
+  .quiz-meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.82rem;
+    color:var(--ink-soft);
+  }
+  .quiz-meta .score{ color:var(--red); font-weight:700; }
+  .q-text{
+    font-size:1.12rem;
+    font-weight:600;
+    color:var(--ink);
+    margin-bottom:18px;
+    line-height:1.6;
+  }
+  .opt-list{ display:grid; gap:10px; margin-bottom:18px; }
+  .opt-btn{
+    text-align:left;
+    background:#FBF7EA;
+    border:1.5px solid var(--paper-line);
+    border-radius:8px;
+    padding:12px 16px;
+    font-family:'Hind Siliguri', sans-serif;
+    font-size:0.98rem;
+    color:var(--text);
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .opt-btn:hover:not(:disabled){ border-color:var(--gold); background:#F6EFD9; }
+  .opt-btn.correct{ background:#E7F0E3; border-color:#5C8A52; color:#2F4A2A; font-weight:700;}
+  .opt-btn.wrong{ background:#F6E4E1; border-color:var(--red); color:var(--red); font-weight:700; }
+  .opt-btn:disabled{ cursor:default; opacity:0.85; }
+  .quiz-actions{ display:flex; gap:12px; align-items:center; }
+  .next-btn{
+    background:var(--ink);
+    color:var(--paper);
+    border:none;
+    padding:11px 24px;
+    border-radius:7px;
+    font-family:'Hind Siliguri', sans-serif;
+    font-weight:600;
+    cursor:pointer;
+    font-size:0.95rem;
+  }
+  .next-btn:hover{ background:var(--red); }
+  .feedback-tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.82rem;
+    padding:6px 10px;
+    border-radius:5px;
+    display:none;
+  }
+  .feedback-tag.show{ display:inline-block; }
+  .feedback-tag.ok{ background:#E7F0E3; color:#2F4A2A; }
+  .feedback-tag.no{ background:#F6E4E1; color:var(--red); }
+
+  .quiz-done{
+    text-align:center;
+    padding:30px 10px;
+  }
+  .quiz-done .big{
+    font-family:'Tiro Bangla', serif;
+    font-size:2.2rem;
+    color:var(--ink);
+    margin-bottom:6px;
+  }
+  .restart-btn{
+    margin-top:16px;
+    background:var(--red-soft);
+    color:#fff;
+    border:none;
+    padding:10px 22px;
+    border-radius:7px;
+    font-weight:600;
+    cursor:pointer;
+    font-family:'Hind Siliguri', sans-serif;
+  }
+
+  footer{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:0.82rem;
+    padding:20px;
+    position:relative;
+    z-index:2;
+  }
+
+  :focus-visible{
+    outline:2.5px solid var(--gold);
+    outline-offset:2px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand-row">
+    <div>
+      <div class="brand">পাঠ<span>খাতা</span></div>
+      <div class="tagline">SSC শিক্ষার্থীদের জন্য নোটস, সূত্র ও MCQ অনুশীলন</div>
+    </div>
+    <div class="stamp">SSC · NCTB</div>
+  </div>
+</header>
+
+<nav class="subject-tabs" id="subjectTabs">
+  <button class="tab-btn active" data-subject="bangla">বাংলা</button>
+  <button class="tab-btn" data-subject="physics">পদার্থবিজ্ঞান</button>
+  <button class="tab-btn" data-subject="chemistry">রসায়ন</button>
+  <button class="tab-btn" data-subject="english">English</button>
+</nav>
+
+<main id="mainPanel"></main>
+
+<footer>জারিফের পাঠখাতা — শিক্ষার্থীদের জন্য তৈরি একটি স্টাডি রিসোর্স</footer>
+
+<script>
+/* ============ DATA ============ */
+const DATA = {
+  bangla: {
+    label: "বাংলা", en: "BANGLA · SAHITYO",
+    sub: "কবি পরিচিতি, মূলভাব ও ব্যাকরণের সংক্ষিপ্ত নোট",
+    notes: [
+      {t:"কাজী নজরুল ইসলাম", d:"বাংলা সাহিত্যের 'বিদ্রোহী কবি'। তাঁর কবিতায় শোষণ ও অন্যায়ের বিরুদ্ধে বিদ্রোহ, মানবতা ও সাম্যের বাণী প্রকাশ পেয়েছে। বিখ্যাত রচনা: 'বিদ্রোহী', 'সাম্যবাদী'।"},
+      {t:"সুকান্ত ভট্টাচার্য", d:"অল্প বয়সে প্রয়াত হলেও তাঁর কবিতায় দরিদ্র মানুষের প্রতি সহমর্মিতা ও সামাজিক বৈষম্যের বিরুদ্ধে প্রতিবাদ ফুটে উঠেছে। 'ছাড়পত্র' তাঁর উল্লেখযোগ্য কাব্যগ্রন্থ।"},
+      {t:"শামসুর রাহমান", d:"আধুনিক বাংলা কবিতার অন্যতম দিকপাল। তাঁর কবিতায় নাগরিক জীবন, স্বদেশপ্রেম ও মুক্তিযুদ্ধের চেতনা গুরুত্বপূর্ণ স্থান পেয়েছে।"},
+      {t:"আল মাহমুদ", d:"গ্রামীণ জীবন, প্রকৃতি ও পুরাণের অনুষঙ্গ তাঁর কবিতার বৈশিষ্ট্য। তাঁর ভাষায় লোকজ শব্দ ও চিত্রকল্পের ব্যবহার লক্ষণীয়।"},
+      {t:"ভাষা রীতি", d:"সাধু ও চলিত রীতি বাংলা ভাষার দুটি প্রধান রূপ। সাধু রীতিতে তৎসম শব্দ ও ক্রিয়াপদের পূর্ণরূপ ব্যবহৃত হয়, চলিত রীতি কথ্য ভাষার কাছাকাছি ও সংক্ষিপ্ত রূপ ব্যবহার করে।"},
+    ],
+    quiz: [
+      {q:"'বিদ্রোহী কবি' নামে পরিচিত কে?", opts:["রবীন্দ্রনাথ ঠাকুর","কাজী নজরুল ইসলাম","জীবনানন্দ দাশ","জসীমউদ্‌দীন"], a:1},
+      {q:"'ছাড়পত্র' কাব্যগ্রন্থটি কার রচনা?", opts:["সুকান্ত ভট্টাচার্য","শামসুর রাহমান","আল মাহমুদ","ফররুখ আহমদ"], a:0},
+      {q:"বাংলা ভাষার প্রধান রীতি কয়টি?", opts:["এক","দুই","তিন","চার"], a:1},
+      {q:"চলিত রীতির বৈশিষ্ট্য কোনটি?", opts:["ক্রিয়াপদের পূর্ণরূপ","তৎসম শব্দের আধিক্য","সংক্ষিপ্ত কথ্য রূপ","জটিল বাক্যগঠন"], a:2},
+      {q:"শামসুর রাহমানের কবিতায় প্রধানত কোন চেতনা লক্ষ করা যায়?", opts:["ধর্মীয় আচার","মুক্তিযুদ্ধ ও নাগরিক জীবন","পৌরাণিক কাহিনি","বিদেশ ভ্রমণ"], a:1},
+      {q:"'সাম্যবাদী' কার রচনা?", opts:["কাজী নজরুল ইসলাম","আল মাহমুদ","সুকান্ত ভট্টাচার্য","শামসুর রাহমান"], a:0},
+    ]
+  },
+
+  physics: {
+    label: "পদার্থবিজ্ঞান", en: "PHYSICS · BHOUTOBIGGAN",
+    sub: "তড়িৎ, চুম্বকত্ব ও গতিসংক্রান্ত মূল ধারণা ও সূত্র",
+    notes: [
+      {t:"ট্রান্সফরমার", d:"ট্রান্সফরমার একটি যন্ত্র যা পারস্পরিক আবেশনের (mutual induction) মাধ্যমে এসি ভোল্টেজকে বাড়ায় বা কমায়। Step-up ট্রান্সফরমারে সেকেন্ডারি প্যাঁচ সংখ্যা প্রাইমারির চেয়ে বেশি থাকে, আর Step-down এ কম থাকে।"},
+      {t:"তড়িৎ প্রবাহ", d:"পরিবাহীর মধ্য দিয়ে একক সময়ে যে পরিমাণ চার্জ প্রবাহিত হয়, তাকে তড়িৎ প্রবাহ বলে। এর একক অ্যাম্পিয়ার (A)।"},
+      {t:"নিউটনের গতিসূত্র", d:"প্রথম সূত্র জড়তা নিয়ে বলে, দ্বিতীয় সূত্র বল ও ত্বরণের সম্পর্ক (F=ma) নির্দেশ করে, তৃতীয় সূত্র বলে প্রতিটি ক্রিয়ার সমান ও বিপরীত প্রতিক্রিয়া থাকে।"},
+      {t:"শক্তির নিত্যতা সূত্র", d:"শক্তি ধ্বংস বা সৃষ্টি করা যায় না, শুধু এক রূপ থেকে অন্য রূপে রূপান্তরিত হয়। মোট শক্তি সর্বদা সংরক্ষিত থাকে।"},
+      {t:"বিদ্যুৎ পরিবহনে step-up ট্রান্সফরমারের ব্যবহার", d:"বিদ্যুৎকেন্দ্র থেকে উচ্চ ভোল্টেজে বিদ্যুৎ পরিবহন করা হয়, যাতে তড়িৎ প্রবাহ কম থাকে এবং তারে শক্তির অপচয় (I²R loss) কমে যায়।"},
+    ],
+    formulas: [
+      {n:"ট্রান্সফরমার ভোল্টেজ অনুপাত", e:"Vs/Vp = Ns/Np"},
+      {n:"ট্রান্সফরমার প্রবাহ অনুপাত", e:"Is/Ip = Np/Ns"},
+      {n:"আদর্শ ট্রান্সফরমারে ক্ষমতা", e:"Vp·Ip = Vs·Is"},
+      {n:"নিউটনের দ্বিতীয় সূত্র", e:"F = m·a"},
+      {n:"কাজ", e:"W = F·s"},
+      {n:"ক্ষমতা", e:"P = W/t"},
+      {n:"তড়িৎ ক্ষমতা", e:"P = V·I"},
+      {n:"ওহমের সূত্র", e:"V = I·R"},
+    ],
+    quiz: [
+      {q:"যে ট্রান্সফরমারে সেকেন্ডারি প্যাঁচ সংখ্যা প্রাইমারির চেয়ে বেশি, তাকে কী বলে?", opts:["Step-down","Step-up","আইসোলেশন","অটো ট্রান্সফরমার"], a:1},
+      {q:"আদর্শ ট্রান্সফরমারে কোনটি সংরক্ষিত থাকে?", opts:["ভোল্টেজ","প্রবাহ","ক্ষমতা","রোধ"], a:2},
+      {q:"বিদ্যুৎ পরিবহনে উচ্চ ভোল্টেজ ব্যবহারের সুবিধা কী?", opts:["তার মোটা লাগে","শক্তি অপচয় কমে","ভোল্টেজ কমে যায়","প্রবাহ বেড়ে যায়"], a:1},
+      {q:"নিউটনের দ্বিতীয় সূত্র অনুযায়ী F = ?", opts:["m/a","m·a","a/m","m+a"], a:1},
+      {q:"তড়িৎ প্রবাহের একক কী?", opts:["ভোল্ট","ওহম","অ্যাম্পিয়ার","ওয়াট"], a:2},
+      {q:"ওহমের সূত্র অনুযায়ী V = ?", opts:["I/R","I·R","R/I","I+R"], a:1},
+    ]
+  },
+
+  chemistry: {
+    label: "রসায়ন", en: "CHEMISTRY · ROSHAYON",
+    sub: "পর্যায় সারণি, মৌলের গঠন ও রাসায়নিক বিক্রিয়ার নোট",
+    notes: [
+      {t:"পর্যায় সারণি", d:"মৌলসমূহকে পারমাণবিক সংখ্যার ক্রম অনুসারে সাজানো সারণিকে পর্যায় সারণি বলে। একই গ্রুপের মৌলগুলোর রাসায়নিক ধর্ম প্রায় একই রকম হয়।"},
+      {t:"পরমাণুর গঠন", d:"পরমাণু প্রোটন, নিউট্রন ও ইলেকট্রন দ্বারা গঠিত। প্রোটন ও নিউট্রন নিউক্লিয়াসে থাকে, ইলেকট্রন নিউক্লিয়াসের চারপাশে শক্তিস্তরে ঘোরে।"},
+      {t:"মোলের ধারণা", d:"এক মোল পদার্থে 6.022×10²³ সংখ্যক কণা (অ্যাভোগেড্রো সংখ্যা) থাকে। স্টয়কিওমেট্রি হিসাবের ভিত্তি এই মোলের ধারণা।"},
+      {t:"সাবান ও পানির কাঠিন্য", d:"খর পানিতে ক্যালসিয়াম ও ম্যাগনেসিয়াম আয়ন থাকায় সাবান সহজে ফেনা তৈরি করে না, কারণ এই আয়নগুলো সাবানের সাথে বিক্রিয়া করে অদ্রবণীয় যৌগ তৈরি করে।"},
+      {t:"এসিড ও ক্ষার", d:"এসিড pH ৭-এর কম এবং জলীয় দ্রবণে H⁺ আয়ন দেয়। ক্ষার pH ৭-এর বেশি এবং জলীয় দ্রবণে OH⁻ আয়ন দেয়।"},
+    ],
+    formulas: [
+      {n:"মোল সংখ্যা", e:"n = m/M"},
+      {n:"অ্যাভোগেড্রো সংখ্যা", e:"N = n × 6.022×10²³"},
+      {n:"ঘনত্ব", e:"ρ = m/V"},
+      {n:"গ্যাসের আদর্শ সমীকরণ", e:"PV = nRT"},
+      {n:"pH নির্ণয়", e:"pH = −log[H⁺]"},
+      {n:"শতকরা গঠন", e:"% = (উপাদানের ভর/মোট ভর) × 100"},
+    ],
+    quiz: [
+      {q:"এক মোল পদার্থে কণার সংখ্যা কত?", opts:["6.022×10²²","6.022×10²³","6.022×10²⁴","6.022×10²¹"], a:1},
+      {q:"খর পানিতে কোন আয়ন থাকায় সাবান কম ফেনা তৈরি করে?", opts:["সোডিয়াম, পটাশিয়াম","ক্যালসিয়াম, ম্যাগনেসিয়াম","ক্লোরাইড, সালফেট","হাইড্রোজেন, অক্সিজেন"], a:1},
+      {q:"এসিডের জলীয় দ্রবণে কোন আয়ন পাওয়া যায়?", opts:["OH⁻","H⁺","Na⁺","Cl⁻"], a:1},
+      {q:"পরমাণুর নিউক্লিয়াসে কী থাকে?", opts:["শুধু ইলেকট্রন","প্রোটন ও নিউট্রন","শুধু নিউট্রন","প্রোটন ও ইলেকট্রন"], a:1},
+      {q:"pH এর মান 7 এর বেশি হলে দ্রবণটি কেমন হবে?", opts:["এসিডিক","নিরপেক্ষ","ক্ষারীয়","কোনোটিই নয়"], a:2},
+      {q:"গ্যাসের আদর্শ সমীকরণ কোনটি?", opts:["PV = nRT","P = mV","V = nT","PT = nV"], a:0},
+    ]
+  },
+
+  english: {
+    label: "English", en: "ENGLISH GRAMMAR",
+    sub: "Tense, Voice, Narration ও অন্যান্য গুরুত্বপূর্ণ গ্রামার নোট",
+    notes: [
+      {t:"Tense", d:"Tense বাক্যের ক্রিয়ার কাজ কখন ঘটেছে তা নির্দেশ করে — Present, Past, Future। প্রতিটি tense আবার Indefinite, Continuous, Perfect ও Perfect Continuous রূপে ভাগ হয়।"},
+      {t:"Voice (Active ও Passive)", d:"Active voice-এ কর্তা কাজ করে, Passive voice-এ কর্তা কাজের দ্বারা প্রভাবিত হয়। Passive গঠনে subject ও object পরিবর্তন হয় এবং verb-এর সাথে 'be + past participle' যুক্ত হয়।"},
+      {t:"Narration (Direct/Indirect Speech)", d:"Direct speech-এ বক্তার কথা হুবহু উদ্ধৃত করা হয়, Indirect speech-এ তা reporting করা হয়। Tense, pronoun ও time/place expression পরিবর্তিত হয় নিয়ম অনুসারে।"},
+      {t:"Preposition", d:"Preposition noun বা pronoun-এর সাথে বাক্যের অন্য অংশের সম্পর্ক প্রকাশ করে — যেমন: in, on, at, by, with, from ইত্যাদি।"},
+      {t:"Subject-Verb Agreement", d:"Subject singular হলে verb-ও singular হয়, subject plural হলে verb-ও plural হয়। এটি ইংরেজি বাক্য গঠনের একটি মৌলিক নিয়ম।"},
+    ],
+    quiz: [
+      {q:"Choose the correct passive voice: 'He writes a letter.'", opts:["A letter is written by him.","A letter was written by him.","A letter writes by him.","A letter has written by him."], a:0},
+      {q:"Which sentence is in the Present Perfect tense?", opts:["I go to school.","I went to school.","I have gone to school.","I am going to school."], a:2},
+      {q:"Identify the preposition: 'The book is on the table.'", opts:["book","is","on","table"], a:2},
+      {q:"Choose the correct indirect speech: He said, \"I am happy.\"", opts:["He said that he is happy.","He said that he was happy.","He says that he was happy.","He said that I was happy."], a:1},
+      {q:"Which is correct subject-verb agreement?", opts:["She go to school.","They goes to school.","She goes to school.","She going to school."], a:2},
+      {q:"'By' in 'The work was done by him' indicates —", opts:["Time","Agent","Place","Manner"], a:1},
+    ]
+  }
+};
+
+/* ============ STATE ============ */
+let currentSubject = "bangla";
+let currentMode = "notes";
+let quizState = {};
+
+function initQuizState(key){
+  const items = DATA[key].quiz.map((q,i)=>({...q, idx:i}));
+  // shuffle
+  for(let i=items.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [items[i],items[j]]=[items[j],items[i]];
+  }
+  quizState[key] = { items, pos:0, score:0, answered:false, done:false };
+}
+
+/* ============ RENDER ============ */
+function render(){
+  const subj = DATA[currentSubject];
+  const hasFormula = !!subj.formulas;
+
+  let modesHtml = `
+    <button class="mode-btn ${currentMode==='notes'?'active':''}" data-mode="notes">নোটস</button>
+    ${hasFormula ? `<button class="mode-btn ${currentMode==='formula'?'active':''}" data-mode="formula">সূত্র</button>` : ''}
+    <button class="mode-btn ${currentMode==='quiz'?'active':''}" data-mode="quiz">MCQ অনুশীলন</button>
+  `;
+
+  let notesHtml = subj.notes.map(n => `
+    <div class="note-card">
+      <h3>${n.t}</h3>
+      <p>${n.d}</p>
+    </div>
+  `).join('');
+
+  let formulaHtml = hasFormula ? `
+    <div class="formula-grid">
+      ${subj.formulas.map(f=>`
+        <div class="formula-item">
+          <span class="formula-name">${f.n}</span>
+          <span class="formula-expr">${f.e}</span>
+        </div>
+      `).join('')}
+    </div>
+  ` : '';
+
+  document.getElementById('mainPanel').innerHTML = `
+    <div class="subject-panel active">
+      <div class="subject-head">
+        <h2>${subj.label}</h2>
+        <span class="en">${subj.en}</span>
+      </div>
+      <p class="subject-sub">${subj.sub}</p>
+      <div class="mode-row">${modesHtml}</div>
+
+      <div class="mode-panel ${currentMode==='notes'?'active':''}" id="panel-notes">${notesHtml}</div>
+      ${hasFormula ? `<div class="mode-panel ${currentMode==='formula'?'active':''}" id="panel-formula">${formulaHtml}</div>` : ''}
+      <div class="mode-panel ${currentMode==='quiz'?'active':''}" id="panel-quiz"></div>
+    </div>
+  `;
+
+  document.querySelectorAll('.mode-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      currentMode = btn.dataset.mode;
+      render();
+    });
+  });
+
+  if(currentMode === 'quiz'){
+    if(!quizState[currentSubject]) initQuizState(currentSubject);
+    renderQuiz();
+  }
+}
+
+function renderQuiz(){
+  const st = quizState[currentSubject];
+  const wrap = document.getElementById('panel-quiz');
+
+  if(st.done){
+    wrap.innerHTML = `
+      <div class="quiz-done">
+        <div class="big">${st.score} / ${st.items.length}</div>
+        <p>তুমি এই সাবজেক্টের অনুশীলন শেষ করেছ। আবার চেষ্টা করতে চাইলে নিচের বাটনে ক্লিক করো — প্রশ্নের ক্রম নতুন করে সাজানো হবে।</p>
+        <button class="restart-btn" id="restartBtn">আবার শুরু করো</button>
+      </div>
+    `;
+    document.getElementById('restartBtn').addEventListener('click', ()=>{
+      initQuizState(currentSubject);
+      renderQuiz();
+    });
+    return;
+  }
+
+  const q = st.items[st.pos];
+  wrap.innerHTML = `
+    <div class="quiz-wrap">
+      <div class="quiz-meta">
+        <span>প্রশ্ন ${st.pos+1} / ${st.items.length}</span>
+        <span class="score">স্কোর: ${st.score}</span>
+      </div>
+      <div class="q-text">${q.q}</div>
+      <div class="opt-list" id="optList">
+        ${q.opts.map((o,i)=>`<button class="opt-btn" data-i="${i}">${o}</button>`).join('')}
+      </div>
+      <div class="quiz-actions">
+        <button class="next-btn" id="nextBtn" style="display:none;">${st.pos+1===st.items.length ? 'ফলাফল দেখো' : 'পরবর্তী প্রশ্ন'}</button>
+        <span class="feedback-tag" id="fbTag"></span>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll('#optList .opt-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(st.answered) return;
+      st.answered = true;
+      const chosen = parseInt(btn.dataset.i);
+      const allBtns = document.querySelectorAll('#optList .opt-btn');
+      allBtns.forEach(b=>b.disabled = true);
+
+      const fb = document.getElementById('fbTag');
+      if(chosen === q.a){
+        btn.classList.add('correct');
+        st.score++;
+        fb.textContent = '✓ সঠিক উত্তর';
+        fb.classList.add('show','ok');
+      } else {
+        btn.classList.add('wrong');
+        allBtns[q.a].classList.add('correct');
+        fb.textContent = '✗ ভুল উত্তর';
+        fb.classList.add('show','no');
+      }
+      document.getElementById('nextBtn').style.display = 'inline-block';
+    });
+  });
+
+  document.getElementById('nextBtn').addEventListener('click', ()=>{
+    st.pos++;
+    st.answered = false;
+    if(st.pos >= st.items.length){ st.done = true; }
+    renderQuiz();
+  });
+}
+
+/* ============ NAV ============ */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentSubject = btn.dataset.subject;
+    currentMode = 'notes';
+    render();
+  });
+});
+
+render();
+</script>
+</body>
+</html>
