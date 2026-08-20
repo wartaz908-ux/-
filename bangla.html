@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>পাঠখাতা | বাংলা ১ম — অধ্যায় ১ (বই পড়া)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Baloo+Da+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#fbf8f0;
+    --rule:#cfe0ee;
+    --margin:#c0392b;
+    --ink:#1c2b45;
+    --ink-soft:#4a5773;
+    --gold:#c98a2b;
+    --correct:#2f8f56;
+    --wrong:#c0392b;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Hind Siliguri',sans-serif;
+    color:var(--ink);
+    background:
+      repeating-linear-gradient(var(--paper) 0px, var(--paper) 33px, var(--rule) 34px),
+      var(--paper);
+    background-attachment:local;
+    min-height:100vh;
+    position:relative;
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    top:0; bottom:0; left:38px;
+    width:2px;
+    background:var(--margin);
+    opacity:.55;
+    z-index:0;
+  }
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding:28px 20px 60px 56px;
+    position:relative;
+    z-index:1;
+  }
+  header{ margin-bottom:22px; }
+  .eyebrow{
+    font-size:13px;
+    letter-spacing:.06em;
+    color:var(--gold);
+    font-weight:600;
+    text-transform:uppercase;
+  }
+  h1{
+    font-family:'Baloo Da 2',sans-serif;
+    font-size:28px;
+    font-weight:700;
+    margin:4px 0 2px;
+    color:var(--ink);
+  }
+  .sub{ font-size:14px; color:var(--ink-soft); }
+  .progress-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:18px 0 10px;
+    font-size:13px;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
+  .bar{
+    height:6px;
+    background:#e7e0d0;
+    border-radius:4px;
+    overflow:hidden;
+    margin-bottom:20px;
+  }
+  .bar-fill{
+    height:100%;
+    background:var(--gold);
+    transition:width .3s ease;
+  }
+  .card{
+    background:var(--card);
+    border:1px solid #eae3d2;
+    border-radius:10px;
+    padding:22px 20px;
+    box-shadow:0 2px 10px rgba(28,43,69,.06);
+  }
+  .qnum{
+    font-family:'Baloo Da 2',sans-serif;
+    font-size:13px;
+    color:var(--margin);
+    font-weight:700;
+    margin-bottom:6px;
+  }
+  .qtext{
+    font-size:18px;
+    font-weight:600;
+    line-height:1.55;
+    margin-bottom:18px;
+  }
+  .opt{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:12px 14px;
+    border:1.5px solid #e2dbc8;
+    border-radius:8px;
+    margin-bottom:10px;
+    cursor:pointer;
+    transition:border-color .15s, background .15s;
+  }
+  .opt:hover{border-color:var(--gold);}
+  .opt.selected{border-color:var(--gold); background:#fdf6e8;}
+  .opt.correct{border-color:var(--correct); background:#eaf7ee;}
+  .opt.wrong{border-color:var(--wrong); background:#fbeaea;}
+  .bubble{
+    flex:0 0 auto;
+    width:26px; height:26px;
+    border-radius:50%;
+    border:2px solid #b9ae94;
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:700;
+    color:var(--ink-soft);
+  }
+  .opt.selected .bubble{border-color:var(--gold); color:var(--gold);}
+  .opt.correct .bubble{border-color:var(--correct); background:var(--correct); color:#fff;}
+  .opt.wrong .bubble{border-color:var(--wrong); background:var(--wrong); color:#fff;}
+  .otext{font-size:15.5px; line-height:1.5; padding-top:2px;}
+  .nav-row{ display:flex; justify-content:flex-end; margin-top:18px; }
+  button{
+    font-family:'Hind Siliguri',sans-serif;
+    font-size:15px;
+    font-weight:600;
+    padding:11px 22px;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+    background:var(--ink);
+    color:#fff;
+    transition:opacity .15s;
+  }
+  button:disabled{opacity:.35; cursor:not-allowed;}
+  button:hover:not(:disabled){opacity:.88;}
+  .result-card{ text-align:center; padding:36px 24px; }
+  .score-big{
+    font-family:'Baloo Da 2',sans-serif;
+    font-size:52px;
+    font-weight:800;
+    color:var(--gold);
+    margin:6px 0;
+  }
+  .result-msg{font-size:15px; color:var(--ink-soft); margin-bottom:22px;}
+  .review{ text-align:left; margin-top:22px; border-top:1px dashed #e2dbc8; padding-top:16px; }
+  .review-item{ font-size:14px; margin-bottom:12px; line-height:1.6; }
+  .review-item b{color:var(--ink);}
+  .rw{color:var(--wrong); font-weight:600;}
+  .rc{color:var(--correct); font-weight:600;}
+  footer{ text-align:center; font-size:12px; color:var(--ink-soft); margin-top:26px; opacity:.7; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">পাঠখাতা · প্রথম অধ্যায় (গদ্য)</div>
+    <h1>বই পড়া — প্রমথ চৌধুরী</h1>
+    <div class="sub">নবম-দশম শ্রেণি · বাংলা ১ম পত্র অনুশীলনী কুইজ</div>
+  </header>
+
+  <div id="quizArea">
+    <div class="progress-row">
+      <span id="progressText">প্রশ্ন ১ / ৮</span>
+      <span id="scoreText">স্কোর: ০</span>
+    </div>
+    <div class="bar"><div class="bar-fill" id="barFill" style="width:0%"></div></div>
+
+    <div class="card">
+      <div class="qnum" id="qnum">প্রশ্ন ১</div>
+      <div class="qtext" id="qtext"></div>
+      <div id="optionsArea"></div>
+      <div class="nav-row">
+        <button id="nextBtn" disabled>পরবর্তী প্রশ্ন</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultArea" style="display:none;">
+    <div class="card result-card">
+      <div class="eyebrow">তোমার ফলাফল</div>
+      <div class="score-big" id="finalScore">০ / ৮</div>
+      <div class="result-msg" id="finalMsg"></div>
+      <button id="retryBtn">আবার শুরু করি</button>
+      <div class="review" id="reviewArea"></div>
+    </div>
+  </div>
+
+  <footer>পাঠখাতা — SSC শিক্ষার্থীদের জন্য</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+  {q:"'বই পড়া' প্রবন্ধটি প্রমথ চৌধুরীর কোন গ্রন্থ থেকে নেওয়া হয়েছে?",o:["প্রবন্ধ সংগ্রহ","নীললোহিত","বীরবলের হালখাতা","চার-ইয়ারি কথা"],a:0},
+  {q:"লেখকের মতে, মানুষের সর্বপ্রধান শ্রেষ্ঠ সাধনা কোনটি?",o:["অর্থ উপার্জন","সাহিত্য চর্চা","বিজ্ঞান সাধনা","ধর্ম সাধনা"],a:1},
+  {q:"প্রমথ চৌধুরীর মতে, হাসপাতালের চেয়ে কোনটি বেশি প্রয়োজনীয়?",o:["বিদ্যালয়","লাইব্রেরি","পার্ক","ক্লাব"],a:1},
+  {q:"কাদের মতে সাহিত্য চর্চার ফল হাতে হাতে পাওয়া যায় না?",o:["সাহিত্যিকদের মতে","বাস্তব বস্তুগত চিন্তার মানুষের মতে","শিক্ষকদের মতে","বিজ্ঞানীদের মতে"],a:1},
+  {q:"প্রমথ চৌধুরী কোন ছদ্মনামে সাহিত্য চর্চা করতেন?",o:["পরশুরাম","বীরবল","বনফুল","একরামউদ্দিন"],a:1},
+  {q:"আমাদের শিক্ষা ব্যবস্থা কেমন হওয়া উচিত বলে প্রমথ চৌধুরী মনে করেন?",o:["বাধ্যবাধকতামূলক","স্বশিক্ষিত হওয়ার উপযোগী","মুখস্থনির্ভর","পরীক্ষা কেন্দ্রিক"],a:1},
+  {q:"'সুশিক্ষিত লোক মাত্রই —' বাক্যের শূন্যস্থানে কী বসবে?",o:["বিজ্ঞানী","পণ্ডিত","স্বশিক্ষিত","কর্মঠ"],a:2},
+  {q:"প্রমথ চৌধুরীর সম্পাদনায় কোন পত্রিকা প্রকাশিত হয়?",o:["বঙ্গদর্শন","সবুজপত্র","সমকাল","দিনকাল"],a:1}
+];
+
+const LABELS = ["ক","খ","গ","ঘ"];
+let current = 0;
+let score = 0;
+let answered = false;
+let userAnswers = [];
+
+const qnum = document.getElementById('qnum');
+const qtext = document.getElementById('qtext');
+const optionsArea = document.getElementById('optionsArea');
+const nextBtn = document.getElementById('nextBtn');
+const progressText = document.getElementById('progressText');
+const scoreText = document.getElementById('scoreText');
+const barFill = document.getElementById('barFill');
+const quizArea = document.getElementById('quizArea');
+const resultArea = document.getElementById('resultArea');
+
+function renderQuestion(){
+  answered = false;
+  nextBtn.disabled = true;
+  nextBtn.textContent = (current === QUESTIONS.length - 1) ? "ফলাফল দেখি" : "পরবর্তী প্রশ্ন";
+  const item = QUESTIONS[current];
+  qnum.textContent = "প্রশ্ন " + (current+1);
+  qtext.textContent = item.q;
+  progressText.textContent = "প্রশ্ন " + (current+1) + " / " + QUESTIONS.length;
+  scoreText.textContent = "স্কোর: " + score;
+  barFill.style.width = (current/QUESTIONS.length*100) + "%";
+
+  optionsArea.innerHTML = "";
+  item.o.forEach((opt, idx) => {
+    const div = document.createElement('div');
+    div.className = 'opt';
+    div.innerHTML = '<div class="bubble">'+LABELS[idx]+'</div><div class="otext">'+opt+'</div>';
+    div.addEventListener('click', () => selectOption(idx, div));
+    optionsArea.appendChild(div);
+  });
+}
+
+function selectOption(idx, el){
+  if(answered) return;
+  answered = true;
+  const item = QUESTIONS[current];
+  const correctIdx = item.a;
+  const allOpts = optionsArea.querySelectorAll('.opt');
+
+  if(idx === correctIdx){
+    el.classList.add('correct');
+    score++;
+  } else {
+    el.classList.add('wrong');
+    allOpts[correctIdx].classList.add('correct');
+  }
+  userAnswers.push({q:item.q, chosen:idx, correct:correctIdx, opts:item.o});
+  scoreText.textContent = "স্কোর: " + score;
+  nextBtn.disabled = false;
+}
+
+nextBtn.addEventListener('click', () => {
+  if(current < QUESTIONS.length - 1){
+    current++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+});
+
+function showResult(){
+  quizArea.style.display = 'none';
+  resultArea.style.display = 'block';
+  barFill.style.width = '100%';
+  document.getElementById('finalScore').textContent = score + " / " + QUESTIONS.length;
+  const pct = Math.round(score/QUESTIONS.length*100);
+  let msg = "";
+  if(pct >= 80) msg = "চমৎকার! তুমি এই অধ্যায়টা ভালোভাবেই বুঝেছ।";
+  else if(pct >= 50) msg = "ভালো করেছ, আরেকটু ঝালাই করলে আরও ভালো হবে।";
+  else msg = "চিন্তা নেই, আরেকবার পড়ে আবার চেষ্টা করো।";
+  document.getElementById('finalMsg').textContent = msg + " (" + pct + "%)";
+
+  const wrongOnes = userAnswers.filter(a => a.chosen !== a.correct);
+  const reviewArea = document.getElementById('reviewArea');
+  if(wrongOnes.length > 0){
+    reviewArea.innerHTML = "<div class='eyebrow'>যেগুলো ভুল হয়েছে</div>";
+    wrongOnes.forEach(a => {
+      const d = document.createElement('div');
+      d.className = 'review-item';
+      d.innerHTML = "<b>"+a.q+"</b><br>তোমার উত্তর: <span class='rw'>"+a.opts[a.chosen]+"</span> · সঠিক উত্তর: <span class='rc'>"+a.opts[a.correct]+"</span>";
+      reviewArea.appendChild(d);
+    });
+  } else {
+    reviewArea.innerHTML = "<div class='eyebrow'>সব উত্তর সঠিক হয়েছে 🎉</div>";
+  }
+}
+
+document.getElementById('retryBtn').addEventListener('click', () => {
+  current = 0; score = 0; userAnswers = [];
+  quizArea.style.display = 'block';
+  resultArea.style.display = 'none';
+  renderQuestion();
+});
+
+renderQuestion();
+</script>
+</body>
+</html>
