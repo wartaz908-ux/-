@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>পাঠখাতা | ICT — অধ্যায় ১ কুইজ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Baloo+Da+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#fbf8f0;
+    --rule:#cfe0ee;
+    --margin:#c0392b;
+    --ink:#1c2b45;
+    --ink-soft:#4a5773;
+    --gold:#c98a2b;
+    --correct:#2f8f56;
+    --wrong:#c0392b;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Hind Siliguri',sans-serif;
+    color:var(--ink);
+    background:
+      repeating-linear-gradient(var(--paper) 0px, var(--paper) 33px, var(--rule) 34px),
+      var(--paper);
+    background-attachment:local;
+    min-height:100vh;
+    position:relative;
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    top:0; bottom:0; left:38px;
+    width:2px;
+    background:var(--margin);
+    opacity:.55;
+    z-index:0;
+  }
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding:28px 20px 60px 56px;
+    position:relative;
+    z-index:1;
+  }
+  header{
+    margin-bottom:22px;
+  }
+  .eyebrow{
+    font-size:13px;
+    letter-spacing:.06em;
+    color:var(--gold);
+    font-weight:600;
+    text-transform:uppercase;
+  }
+  h1{
+    font-family:'Baloo Da 2',sans-serif;
+    font-size:28px;
+    font-weight:700;
+    margin:4px 0 2px;
+    color:var(--ink);
+  }
+  .sub{
+    font-size:14px;
+    color:var(--ink-soft);
+  }
+  .progress-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:18px 0 10px;
+    font-size:13px;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
+  .bar{
+    height:6px;
+    background:#e7e0d0;
+    border-radius:4px;
+    overflow:hidden;
+    margin-bottom:20px;
+  }
+  .bar-fill{
+    height:100%;
+    background:var(--gold);
+    transition:width .3s ease;
+  }
+  .card{
+    background:var(--card);
+    border:1px solid #eae3d2;
+    border-radius:10px;
+    padding:22px 20px;
+    box-shadow:0 2px 10px rgba(28,43,69,.06);
+  }
+  .qnum{
+    font-family:'Baloo Da 2',sans-serif;
+    font-size:13px;
+    color:var(--margin);
+    font-weight:700;
+    margin-bottom:6px;
+  }
+  .qtext{
+    font-size:18px;
+    font-weight:600;
+    line-height:1.55;
+    margin-bottom:18px;
+  }
+  .opt{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:12px 14px;
+    border:1.5px solid #e2dbc8;
+    border-radius:8px;
+    margin-bottom:10px;
+    cursor:pointer;
+    transition:border-color .15s, background .15s;
+  }
+  .opt:hover{border-color:var(--gold);}
+  .opt.selected{border-color:var(--gold); background:#fdf6e8;}
+  .opt.correct{border-color:var(--correct); background:#eaf7ee;}
+  .opt.wrong{border-color:var(--wrong); background:#fbeaea;}
+  .bubble{
+    flex:0 0 auto;
+    width:26px; height:26px;
+    border-radius:50%;
+    border:2px solid #b9ae94;
+    display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:700;
+    color:var(--ink-soft);
+  }
+  .opt.selected .bubble{border-color:var(--gold); color:var(--gold);}
+  .opt.correct .bubble{border-color:var(--correct); background:var(--correct); color:#fff;}
+  .opt.wrong .bubble{border-color:var(--wrong); background:var(--wrong); color:#fff;}
+  .otext{font-size:15.5px; line-height:1.5; padding-top:2px;}
+  .nav-row{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:18px;
+  }
+  button{
+    font-family:'Hind Siliguri',sans-serif;
+    font-size:15px;
+    font-weight:600;
+    padding:11px 22px;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+    background:var(--ink);
+    color:#fff;
+    transition:opacity .15s;
+  }
+  button:disabled{opacity:.35; cursor:not-allowed;}
+  button:hover:not(:disabled){opacity:.88;}
+  .result-card{
+    text-align:center;
+    padding:36px 24px;
+  }
+  .score-big{
+    font-family:'Baloo Da 2',sans-serif;
+    font-size:52px;
+    font-weight:800;
+    color:var(--gold);
+    margin:6px 0;
+  }
+  .result-msg{font-size:15px; color:var(--ink-soft); margin-bottom:22px;}
+  .review{
+    text-align:left;
+    margin-top:22px;
+    border-top:1px dashed #e2dbc8;
+    padding-top:16px;
+  }
+  .review-item{
+    font-size:14px;
+    margin-bottom:12px;
+    line-height:1.6;
+  }
+  .review-item b{color:var(--ink);}
+  .rw{color:var(--wrong); font-weight:600;}
+  .rc{color:var(--correct); font-weight:600;}
+  footer{
+    text-align:center;
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-top:26px;
+    opacity:.7;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">পাঠখাতা · প্রথম অধ্যায়</div>
+    <h1>তথ্য ও যোগাযোগ প্রযুক্তি</h1>
+    <div class="sub">নবম-দশম শ্রেণি · ICT অনুশীলনী কুইজ</div>
+  </header>
+
+  <div id="quizArea">
+    <div class="progress-row">
+      <span id="progressText">প্রশ্ন ১ / ৬১</span>
+      <span id="scoreText">স্কোর: ০</span>
+    </div>
+    <div class="bar"><div class="bar-fill" id="barFill" style="width:0%"></div></div>
+
+    <div class="card">
+      <div class="qnum" id="qnum">প্রশ্ন ১</div>
+      <div class="qtext" id="qtext"></div>
+      <div id="optionsArea"></div>
+      <div class="nav-row">
+        <button id="nextBtn" disabled>পরবর্তী প্রশ্ন</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultArea" style="display:none;">
+    <div class="card result-card">
+      <div class="eyebrow">তোমার ফলাফল</div>
+      <div class="score-big" id="finalScore">০ / ৬১</div>
+      <div class="result-msg" id="finalMsg"></div>
+      <button id="retryBtn">আবার শুরু করি</button>
+      <div class="review" id="reviewArea"></div>
+    </div>
+  </div>
+
+  <footer>পাঠখাতা — SSC শিক্ষার্থীদের জন্য</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+{q:"বেতার যন্ত্রের আবিষ্কারক কে?",o:["গুগলিয়েলমো মার্কনি","রেমন্ড স্যামুয়েল টমলিনসন","চার্লস ব্যাবেজ","অ্যাডা লাভলেস"],a:0},
+{q:"বেতার যন্ত্রের আবিষ্কারক হিসেবে স্বীকৃতি দেওয়া হয় কাকে?",o:["জগদীশচন্দ্র বসু","গুগলিয়েলমো মার্কনি","জেমস ক্লার্ক ম্যাক্সওয়েল","স্টিভ জবস"],a:1},
+{q:"গুগলিয়েলমো মার্কনি কোন দেশের বিজ্ঞানী ছিলেন?",o:["নিউজিল্যান্ড","মেক্সিকো","ইতালি","জার্মানি"],a:2},
+{q:"একস্থান থেকে অন্যত্র তথ্য প্রেরণে বিজ্ঞানী গুগলিয়েলমো মার্কনি কোনটি ব্যবহার করেছিলেন?",o:["বেতার তরঙ্গ","অতিদীর্ঘ তরঙ্গ","আণবিক শক্তি","ফাইবার অপটিক্স"],a:0},
+{q:"বিজ্ঞানী গুগলিয়েলমো মার্কনির জন্ম সাল কোনটি?",o:["১৮৭৪","১৮৭৯","১৯৩৭","১৯৫৫"],a:0},
+{q:"কত সালে ইনস্টিটিউট অফ ইলেক্ট্রিক্যাল এন্ড ইলেকট্রনিক ইঞ্জিনিয়ারিং গুগলিয়েলমো মার্কনিকে স্বীকৃতি দেয়?",o:["১৯৯০","১৯৯৩","১৯৯৫","১৯৯৭"],a:2},
+{q:"রেডিও বিজ্ঞানের অগ্রপথিক ও অন্যতম আবিষ্কারক কে?",o:["জগদীশচন্দ্র বসু","রেমন্ড স্যামুয়েল টমলিনসন","গুগলিয়েলমো মার্কনি","জেমস ক্লার্ক ম্যাক্সওয়েল"],a:2},
+{q:"কোন শতকে মেইনফ্রেম কম্পিউটার তৈরি হয়?",o:["আঠারো","উনিশ","বিশ","একুশ"],a:2},
+{q:"প্রথম কোন কোম্পানি মেইনফ্রেম কম্পিউটার তৈরি করে?",o:["ইনটেল","আইবিএম","অ্যাপল","স্যামসাং"],a:1},
+{q:"আইবিএম কোম্পানির তৈরি প্রথম কম্পিউটারের নাম কী?",o:["মাইক্রো","মিনিফ্রেম","মেইনফ্রেম","ম্যাক্রো"],a:2},
+{q:"আইবিএম কোন দেশের কোম্পানি?",o:["যুক্তরাষ্ট্র","যুক্তরাজ্য","ফ্রান্স","জার্মানি"],a:0},
+{q:"IBM এর পূর্ণনাম কী?",o:["Internet Business Machine","Internal Business Machine","Information Business Machine","International Business Machine"],a:3},
+{q:"মাইক্রোপ্রসেসর কত সালে আবিষ্কৃত হয়?",o:["১৯৬৫","১৯৭১","১৯৭৬","১৯৮৯"],a:1},
+{q:"১৯৭১ সালে নিচের কোনটি আবিষ্কার হয়?",o:["প্রোটোকল","মাইক্রো কম্পিউটার","মার্ক-১","মাইক্রোপ্রসেসর"],a:3},
+{q:"সর্বপ্রথম কোন কোম্পানি মাইক্রোপ্রসেসর তৈরি করে?",o:["অ্যাপল","আইবিএম","জেরন","ইনটেল"],a:3},
+{q:"কোন দশকে ইন্টারনেট প্রোটোকলের ব্যবহার শুরু হয়?",o:["পঞ্চাশের দশকে","ষাট-সত্তরের দশকে","ষাট-আশির দশকে","একুশ শতকে"],a:1},
+{q:"IP এর পূর্ণনাম কী?",o:["Internet Protocol","Internal Protocol","Information Protocol","International Protocol"],a:0},
+{q:"IP ব্যবহার করে প্রথম কোন নেটওয়ার্ক চালু হয়?",o:["Internet","Intranet","Apernet","Arpanet"],a:3},
+{q:"কি ব্যবহার করে আরপানেটের জন্ম হয়?",o:["ওয়ার্ল্ড ওয়াইড ওয়েব","হাইপারটেক্সট ট্রান্সফার প্রোটোকল","ইন্টারনেট প্রোটোকল","সামাজিক যোগাযোগ মাধ্যম"],a:2},
+{q:"ARPANET কী?",o:["অপারেটিং সিস্টেম","নেটওয়ার্ক","মাইক্রোপ্রসেসর","প্রোটোকল"],a:1},
+{q:"নিচের কোনটি আবিষ্কারের ফলে ইন্টারনেট বিকশিত হয়?",o:["প্রোটোকল","ই-মেইল","মাইক্রোপ্রসেসর","আরপানেট"],a:3},
+{q:"কোনটির আবিষ্কারের ফলে নেটওয়ার্কের মাধ্যমে কম্পিউটারসমূহের মধ্যে আন্তঃসংযোগ বিকশিত হতে শুরু করেছে?",o:["Arpanet","Omninet","Ithernet","Intranet"],a:0},
+{q:"নেটওয়ার্ক কী?",o:["ইন্টারনেটের নাম","একাধিক প্রোটোকল","কম্পিউটারসমূহের মধ্যে আন্তঃসংযোগ","প্রোগ্রাম"],a:2},
+{q:"নেটওয়ার্কের বিকাশের ফলে কোনটি তৈরি হয়?",o:["ই-মেইল","ইন্টারনেট","আন্তঃসংযোগ","কোনোটিই নয়"],a:1},
+{q:"ইলেকট্রনিক পত্রালাপের সূচনা করেন কে?",o:["চার্লস ব্যাবেজ","জগদীশ চন্দ্র বসু","রেমন্ড টমলিনসন","স্টিভ জবস"],a:2},
+{q:"ইন্টারনেটের প্রকৃত যাত্রা শুরু হয় কত সালে?",o:["১৯৫৪","১৯৬৯","১৯৮৬","১৯৯০"],a:1},
+{q:"কত সালে আরপানেটে ইলেকট্রনিক পত্রালাপের সূচনা হয়?",o:["১৯৫৫","১৯৬৫","১৯৬৮","১৯৭১"],a:3},
+{q:"কোন Protocol ব্যবহার করে আরপানেট (Arpanet) এর জন্ম হয়?",o:["http protocol","TCP/IP protocol","Internet protocol","Server protocol"],a:2},
+{q:"সর্বপ্রথম ইন্টারনেট প্রোটোকলের ধারণা দেন কে?",o:["গুগলিয়েলমো মার্কনি","মার্ক জুকারবার্গ","স্টিভ জবস","স্যামুয়েল টমলিনসন"],a:3},
+{q:"কে প্রথম ই-মেইল পদ্ধতি চালু করেন?",o:["James Clerk Maxwell","Guglielmo Marconi","Ramond Samuel Tomlinson","Steve Wozaniak"],a:2},
+{q:"কত সালে ই-মেইল সিস্টেম চালু হয়?",o:["১৯৭০","১৯৭১","১৯৭২","১৯৭৩"],a:1},
+{q:"E-mail এর পূর্ণ নাম কী?",o:["Electronic Mail","Electric Mail","Electronic Message","Electronic Mms"],a:0},
+{q:"রেমন্ড স্যামুয়েল টমলিনসন কোনটির প্রবর্তক?",o:["ফেইসবুক","ইন্টারনেট","ই-মেইল","টুইটার"],a:2},
+{q:"রেমন্ড স্যামুয়েল টমলিনসন এর পরিচয় কোনটি?",o:["গণিতবিদ","চিকিৎসক","প্রোগ্রামার","বিজ্ঞানী"],a:2},
+{q:"কোন প্রোগ্রামার আরপানেটে পত্রালাপের সূচনা করেন?",o:["মার্ক জুকারবার্গ","স্যামুয়েল টমলিনসন","স্টিভ জবস","হেনরি বিল গেটস"],a:1},
+{q:"কোন আবির্ভাবের পর পার্সোনাল কম্পিউটার তৈরির কাজ শুরু হয়?",o:["ইন্টারনেট","মাইক্রোপ্রসেসর","বেতার তরঙ্গ","অপারেটিং সিস্টেম"],a:1},
+{q:"পার্সোনাল কম্পিউটারের কাজ প্রথম কোথায় শুরু হয়?",o:["যুক্তরাজ্যে","যুক্তরাষ্ট্রে","জার্মানিতে","ইটালীতে"],a:1},
+{q:"স্টিভ জবস কত বছর বেঁচেছিলেন?",o:["৫০","৫২","৫৪","৫৬"],a:2},
+{q:"স্টিভ জবস জন্ম গ্রহণ করেন—",o:["১৭৯১ সালে","১৮৩১ সালে","১৯৫৫ সালে","১৯৮৪ সালে"],a:2},
+{q:"অ্যাপল কম্পিউটার কবে শুরু হয়?",o:["১লা এপ্রিল, ১৯৭৬","৫ই এপ্রিল, ১৯৭৬","১লা মে, ১৯৭৬","৫ই আগস্ট, ১৯৭৬"],a:0},
+{q:"অ্যাপলের প্রতিষ্ঠাতা কে?",o:["বিল গেটস","স্টিভ জবস","মার্ক জাকারবার্গ","স্যামুয়েল"],a:1},
+{q:"কোন প্রতিষ্ঠানটি প্রথম পার্সোনাল কম্পিউটারের বিকাশে অগ্রণী ভূমিকা পালন করেছে?",o:["মাইক্রোসফট","অ্যাপল","এইচপি","অ্যাডোব"],a:1},
+{q:"কম্পিউটার জগতে বর্তমানে বিশ্বের অন্যতম বৃহৎ প্রতিষ্ঠান কোনটি?",o:["Adobe","Dell","Apple","Google"],a:2},
+{q:"কত সালে আইবিএম মাইক্রোসফটকে অপারেটিং সিস্টেম তৈরির দায়িত্ব প্রদান করে?",o:["১৯৪২","১৯৮১","১৯৮২","১৯৮৩"],a:1},
+{q:"প্রথম কোন কোম্পানি পার্সোনাল কম্পিউটারের জন্য অপারেটিং সিস্টেম তৈরি করে?",o:["অ্যাপল","ডেল","মাইক্রোসফট","এডোবি"],a:2},
+{q:"মাইক্রোসফট কোম্পানির সফটওয়্যার কোনটি?",o:["উইন্ডোজ","লিনাক্স","ম্যাকওএস","অ্যান্ড্রয়েড"],a:0},
+{q:"এমএসডস অপারেটিং সিস্টেমের প্রস্তুতকারী প্রতিষ্ঠান কোনটি?",o:["ক্যানোনিক্যাল","অ্যাপল","মাইক্রোসফট","এইচপি"],a:2},
+{q:"এম এস ডস বিকশিত হয় কখন?",o:["১৯৮১ সালে","১৯৮২ সালে","১৯৮৩ সালে","১৯৮৪ সালে"],a:0},
+{q:"মাইক্রোসফট কোম্পানি কোন অপারেটিং সিস্টেম সর্বপ্রথম তৈরি করে?",o:["DOS","Windows","Unix","Linux"],a:0},
+{q:"মাইক্রোসফট এর স্বত্বাধিকারী কে?",o:["স্টিভ জবস","বিল গেটস","টিম বার্নার্স লি","মার্ক জাকারবার্গ"],a:1},
+{q:"তৃতীয় উইলিয়াম হেনরি 'বিল গেটস' এর জন্ম কত তারিখে?",o:["১৮ অক্টোবর, ১৯৫৫","২৮ অক্টোবর, ১৯৫৫","১৮ অক্টোবর, ১৯৫৬","২৮ অক্টোবর, ১৯৫৬"],a:2},
+{q:"MS DOS কী?",o:["অপারেটিং সিস্টেম","উইন্ডোজ","লিনাক্স","মাইক্রোসফট অফিস"],a:0},
+{q:"উইন্ডোজ কী?",o:["হিসাব-নিকাশের প্রোগ্রাম","নেটওয়ার্কের নেটওয়ার্ক","কম্পিউটারের অপারেটিং সিস্টেম","ডেটাবেজ প্রোগ্রাম"],a:2},
+{q:"উইন্ডোজ অপারেটিং সিস্টেম কোন কোম্পানির তৈরি?",o:["গুগল","অ্যাপল","ওরাকল","মাইক্রোসফট"],a:3},
+{q:"বিশ্বের বেশিরভাগ কম্পিউটারে কোন অপারেটিং সিস্টেম ব্যবহৃত হয়?",o:["Windows","Linux","MAC","Unix"],a:0},
+{q:"অপারেটিং সিস্টেম সফটওয়্যার এর আবিষ্কারক কে?",o:["বিল গেটস","স্টিভ জবস","বার্নাস লি","টমলিনসন"],a:0},
+{q:"HTTP ব্যবহার করে তথ্য ব্যবস্থাপনার প্রস্তাব কত সালে করা হয়?",o:["১৯৫৩","১৯৫৫","১৯৮৯","১৯৯১"],a:2},
+{q:"http ব্যবহার করে তথ্য ব্যবস্থাপনার বাস্তবায়ন করেন কে?",o:["Mark Zukerberk","Tim Berners Lee","William Henry Gates","Steve Wozaniak"],a:1},
+{q:"http সর্ব প্রথম ব্যবহার ও বাস্তবায়ন করেন কে?",o:["স্টিভ জবস","বিল গেটস","জন বার্নার্স লি","ম্যাক্সওয়েল"],a:2},
+{q:"HTTP এর পূর্ণরূপ কী?",o:["Hyper Text Transfer Protocol","Hyper Text Terminate Protocol","Hyper Text Type Program","Hyper Thought Markup Language"],a:0},
+{q:"www এর জনক কে?",o:["Bill Gates","Sir Timothy John Berners Lee","Mark Zuckerberg","Ramond Samuel Tomlinson"],a:1},
+];
+
+const LABELS = ["ক","খ","গ","ঘ"];
+let current = 0;
+let score = 0;
+let answered = false;
+let userAnswers = [];
+
+const qnum = document.getElementById('qnum');
+const qtext = document.getElementById('qtext');
+const optionsArea = document.getElementById('optionsArea');
+const nextBtn = document.getElementById('nextBtn');
+const progressText = document.getElementById('progressText');
+const scoreText = document.getElementById('scoreText');
+const barFill = document.getElementById('barFill');
+const quizArea = document.getElementById('quizArea');
+const resultArea = document.getElementById('resultArea');
+
+function renderQuestion(){
+  answered = false;
+  nextBtn.disabled = true;
+  nextBtn.textContent = (current === QUESTIONS.length - 1) ? "ফলাফল দেখি" : "পরবর্তী প্রশ্ন";
+  const item = QUESTIONS[current];
+  qnum.textContent = "প্রশ্ন " + (current+1);
+  qtext.textContent = item.q;
+  progressText.textContent = "প্রশ্ন " + (current+1) + " / " + QUESTIONS.length;
+  scoreText.textContent = "স্কোর: " + score;
+  barFill.style.width = (current/QUESTIONS.length*100) + "%";
+
+  optionsArea.innerHTML = "";
+  item.o.forEach((opt, idx) => {
+    const div = document.createElement('div');
+    div.className = 'opt';
+    div.innerHTML = '<div class="bubble">'+LABELS[idx]+'</div><div class="otext">'+opt+'</div>';
+    div.addEventListener('click', () => selectOption(idx, div));
+    optionsArea.appendChild(div);
+  });
+}
+
+function selectOption(idx, el){
+  if(answered) return;
+  answered = true;
+  const item = QUESTIONS[current];
+  const correctIdx = item.a;
+  const allOpts = optionsArea.querySelectorAll('.opt');
+
+  if(idx === correctIdx){
+    el.classList.add('correct');
+    score++;
+  } else {
+    el.classList.add('wrong');
+    allOpts[correctIdx].classList.add('correct');
+  }
+  userAnswers.push({q:item.q, chosen:idx, correct:correctIdx, opts:item.o});
+  scoreText.textContent = "স্কোর: " + score;
+  nextBtn.disabled = false;
+}
+
+nextBtn.addEventListener('click', () => {
+  if(current < QUESTIONS.length - 1){
+    current++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+});
+
+function showResult(){
+  quizArea.style.display = 'none';
+  resultArea.style.display = 'block';
+  barFill.style.width = '100%';
+  document.getElementById('finalScore').textContent = score + " / " + QUESTIONS.length;
+  const pct = Math.round(score/QUESTIONS.length*100);
+  let msg = "";
+  if(pct >= 80) msg = "চমৎকার! তুমি এই অধ্যায়টা ভালোভাবেই বুঝেছ।";
+  else if(pct >= 50) msg = "ভালো করেছ, আরেকটু ঝালাই করলে আরও ভালো হবে।";
+  else msg = "চিন্তা নেই, আরেকবার পড়ে আবার চেষ্টা করো।";
+  document.getElementById('finalMsg').textContent = msg + " (" + pct + "%)";
+
+  const wrongOnes = userAnswers.filter(a => a.chosen !== a.correct);
+  const reviewArea = document.getElementById('reviewArea');
+  if(wrongOnes.length > 0){
+    reviewArea.innerHTML = "<div class='eyebrow'>যেগুলো ভুল হয়েছে</div>";
+    wrongOnes.forEach(a => {
+      const d = document.createElement('div');
+      d.className = 'review-item';
+      d.innerHTML = "<b>"+a.q+"</b><br>তোমার উত্তর: <span class='rw'>"+a.opts[a.chosen]+"</span> · সঠিক উত্তর: <span class='rc'>"+a.opts[a.correct]+"</span>";
+      reviewArea.appendChild(d);
+    });
+  } else {
+    reviewArea.innerHTML = "<div class='eyebrow'>সব উত্তর সঠিক হয়েছে 🎉</div>";
+  }
+}
+
+document.getElementById('retryBtn').addEventListener('click', () => {
+  current = 0; score = 0; userAnswers = [];
+  quizArea.style.display = 'block';
+  resultArea.style.display = 'none';
+  renderQuestion();
+});
+
+renderQuestion();
+</script>
+</body>
+</html>
