@@ -758,3 +758,134 @@ render();
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>পাঠখাতা - SSC Interactive Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        /* ইন্ট্রো ও হেডার অংশ */
+        header {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* কন্টেইনার */
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        /* বিষয় ভিত্তিক কার্ড */
+        .subject-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-left: 6px solid #2a5298;
+        }
+
+        .subject-card h2 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
+        }
+
+        /* কুইজের প্রশ্ন ও অপশন */
+        .quiz-option {
+            display: block;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .quiz-option:hover {
+            background: #e2e8f0;
+            border-color: #2a5298;
+        }
+
+        /* বাটন স্টাইল */
+        .btn-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #2a5298;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .btn-link:hover {
+            background-color: #1e3c72;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ১. সুন্দর ইন্ট্রো সেকশন -->
+    <header>
+        <h1>পাঠখাতা 📚</h1>
+        <p>SSC শিক্ষার্থীদের জন্য অনলাইন নোটস ও ইন্টারেক্টিভ MCQ অনুশীলন</p>
+    </header>
+
+    <div class="container">
+
+        <!-- ২. ICT সেকশন -->
+        <div class="subject-card">
+            <h2>💻 তথ্য ও যোগাযোগ প্রযুক্তি (ICT)</h2>
+            <p><strong>প্রশ্ন ১:</strong> কম্পিউটারের মূল মেমোরি কিসের তৈরি?</p>
+            <label class="quiz-option"><input type="radio" name="q1"> ক) অ্যালুমিনিয়াম</label>
+            <label class="quiz-option"><input type="radio" name="q1"> খ) সিলিকন</label>
+            <label class="quiz-option"><input type="radio" name="q1"> গ) প্লাস্টিক</label>
+            <a href="ict-quiz.html" class="btn-link">সম্পূর্ণ ICT কুইজ খেলুন ➔</a>
+        </div>
+
+        <!-- ৩. বাংলা ১ম পত্র সেকশন -->
+        <div class="subject-card" style="border-left-color: #e63946;">
+            <h2 style="color: #e63946;">📖 বাংলা ১ম পত্র</h2>
+            <p><strong>প্রশ্ন ১:</strong> 'বই পড়া' প্রবন্ধটি প্রমথ চৌধুরীর কোন গ্রন্থ থেকে নেওয়া হয়েছে?</p>
+            <label class="quiz-option"><input type="radio" name="q2"> ক) প্রবন্ধ সংগ্রহ</label>
+            <label class="quiz-option"><input type="radio" name="q2"> খ) বীরবলের হালখাতা</label>
+            <a href="bangla.html" class="btn-link" style="background-color: #e63946;">সম্পূর্ণ বাংলা কুইজ খেলুন ➔</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
